@@ -102,7 +102,7 @@ public class Banana {
         int melhorTT = 0;
         double aux = 0;
 
-        for(int i = 500; i<1500; i+=100){
+        for(int i = 500; i<1500; i+=10){
              MultilayerPerceptron ClassificadorMLP  = new MultilayerPerceptron();        
             ClassificadorMLP.setLearningRate(0.1);
             ClassificadorMLP.setMomentum(0.1);
@@ -116,6 +116,7 @@ public class Banana {
                 melhorTT = i;
             }
         }
+        System.out.println("t="+melhorTT);
         return melhorTT;
 
     }
@@ -317,8 +318,8 @@ public class Banana {
      double mediaNB = 0, mediaMLP = 0, mediaSMO = 0, mediaKNN = 0, mediaAD = 0;
      double C = 0;
      Random gerador = new Random();
-     int x = gerador.nextInt(20) +1;
-     int k = 0;
+     int x = gerador.nextInt(20) + 1;
+     int k = 0,T=0;
              
      //decidindoMelhoresParametros(x);
 
@@ -380,6 +381,7 @@ public class Banana {
         if(i==0){
             k = acharK(valida,teste);
             C = melhorC(valida,teste);
+            T = melhorTT(valida,teste);
             System.out.println("K = "+k);
             System.out.println("C = "+C);
             System.out.println("Semente para geração de números aleatórios ="+ x);
@@ -400,8 +402,8 @@ public class Banana {
         
         J48 ClassificadorAD = new J48();
         ClassificadorAD.setUnpruned(true);
-        ClassificadorAD.buildClassifier(valida);
-        Evaluation eval3 = new Evaluation(valida);
+        ClassificadorAD.buildClassifier(treino);
+        Evaluation eval3 = new Evaluation(treino);
         eval3.evaluateModel(ClassificadorAD, teste);                
         gravarArq.printf(String.valueOf(eval3.pctCorrect()/100)+"\n"); 
         System.out.println("Árvore de Decisão"+ i +" : "+String.valueOf(eval3.pctCorrect()/100)+"\n"); 
@@ -429,7 +431,7 @@ public class Banana {
         MultilayerPerceptron ClassificadorMP = new MultilayerPerceptron();        
         ClassificadorMP.setLearningRate(0.1);
         ClassificadorMP.setMomentum(0.1);
-        ClassificadorMP.setTrainingTime(500);
+        ClassificadorMP.setTrainingTime(T);
         ClassificadorMP.setHiddenLayers("5");                
         ClassificadorMP.buildClassifier(treino);
         Evaluation eval6 = new Evaluation(treino);
